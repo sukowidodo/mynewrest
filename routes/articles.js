@@ -19,17 +19,18 @@ router.get('/:limit/:offset', function(req, res, next) {
 router.post('/', upload.single('image'), async function (req, res) {
     var body = req.body
     var uploaddata = req.file
+    var image = BASE_URL +"images/"+ uploaddata.filename
     var sql = "INSERT INTO article (title, content, image) VALUES (?,?,?)";
-    await connection.query(sql, [body.title, body.content, BASE_URL+"image/"+uploaddata.filename] ,function (err, result) {
-            if (err) throw err;
-            res.json({
-                status:'success',
-                data:{
-                    title: body.title, 
-                    content: body.content, 
-                    image: BASE_URL+"image/"+uploaddata.filename}
-            });
+    await connection.query(sql, [body.title, body.content,  image] ,function (err, result) {
+        if (err) throw err;
+        res.json({
+            status:'success',
+            data:{
+                title: body.title, 
+                content: body.content, 
+                image: image}
         });
+    });
 });
 
 router.put('/', function (req,res) {
